@@ -1,0 +1,217 @@
+/* ============================================================
+   AIGC 课程总结 · 界面增强层(第二档优化)
+   暗色模式 / 主题切换 / 阅读进度条 / 卡片渐显 / 表格行高亮
+   ============================================================ */
+
+/* ---------- 阅读进度条 ---------- */
+.read-progress {
+  position: fixed;
+  top: 0; left: 0;
+  height: 3px;
+  width: 0;
+  background: linear-gradient(90deg, var(--accent, #6c5ce7), var(--accent2, #00b8d9));
+  z-index: 9999;
+  transition: width 0.1s linear;
+}
+
+/* ---------- 主题切换按钮 ---------- */
+.theme-toggle {
+  position: fixed;
+  right: 18px;
+  bottom: 18px;
+  width: 46px; height: 46px;
+  border-radius: 50%;
+  border: 1px solid var(--rule, #e3e6f0);
+  background: var(--bg2, #ffffff);
+  color: var(--ink, #1a1d29);
+  font-size: 1.15rem;
+  cursor: pointer;
+  z-index: 9998;
+  box-shadow: 0 4px 16px rgba(26, 29, 41, 0.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.theme-toggle:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(26, 29, 41, 0.18);
+}
+.theme-toggle .icon-sun { display: none; }
+.theme-toggle .icon-moon { display: block; }
+body.dark .theme-toggle .icon-sun { display: block; }
+body.dark .theme-toggle .icon-moon { display: none; }
+
+/* ---------- 返回顶部 ---------- */
+.back-top {
+  position: fixed;
+  right: 18px;
+  bottom: 74px;
+  width: 40px; height: 40px;
+  border-radius: 50%;
+  border: 1px solid var(--rule, #e3e6f0);
+  background: var(--bg2, #ffffff);
+  color: var(--muted, #5a6072);
+  font-size: 1rem;
+  cursor: pointer;
+  z-index: 9997;
+  box-shadow: 0 4px 14px rgba(26, 29, 41, 0.10);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s, transform 0.25s;
+}
+.back-top.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+.back-top:hover {
+  transform: translateY(-2px);
+  color: var(--accent, #6c5ce7);
+}
+
+/* ---------- 卡片滚动渐显 ---------- */
+.reveal {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ---------- 表格 hover 行高亮 ---------- */
+table tbody tr {
+  transition: background-color 0.18s ease;
+}
+table tbody tr:hover td {
+  background-color: rgba(108, 92, 231, 0.07) !important;
+}
+
+/* ---------- 卡片 hover 微交互增强 ---------- */
+.card, .chapter-card, .step, .homework {
+  transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
+}
+
+/* ---------- 暗色模式 ---------- */
+body.dark {
+  --bg: #0f1118;
+  --bg2: #1a1e2b;
+  --ink: #e8eaf3;
+  --muted: #9aa3bd;
+  --rule: #2a2f42;
+  --shadow: rgba(0, 0, 0, 0.35);
+  color-scheme: dark;
+}
+
+body.dark::before {
+  background:
+    radial-gradient(900px 500px at 15% -5%, rgba(108, 92, 231, 0.16), transparent 60%),
+    radial-gradient(800px 480px at 90% 5%, rgba(0, 184, 217, 0.12), transparent 60%),
+    radial-gradient(700px 600px at 50% 110%, rgba(108, 92, 231, 0.10), transparent 60%);
+}
+
+/* 卡片底色随主题 */
+body.dark .chapter-card,
+body.dark .step,
+body.dark .card,
+body.dark .homework,
+body.dark .s-node,
+body.dark .check,
+body.dark .angle-ico,
+body.dark .layer-bar,
+body.dark .model-row,
+body.dark .focal,
+body.dark .light-card,
+body.dark .temp-row .track,
+body.dark .aperture-row .track,
+body.dark .fs-track,
+body.dark .weight .track,
+body.dark .layer-info .m,
+body.dark .vs-side,
+body.dark .table-wrap table {
+  background: rgba(26, 30, 43, 0.75);
+  border-color: rgba(108, 92, 231, 0.18);
+}
+
+body.dark table {
+  background: var(--bg2);
+}
+body.dark th {
+  background: #262b3d;
+  color: #fff;
+}
+body.dark tr:nth-child(even) td {
+  background: rgba(108, 92, 231, 0.05);
+}
+
+/* 提示词代码块 */
+body.dark .prompt-box {
+  background: var(--bg2);
+  border-color: var(--rule);
+}
+body.dark .prompt-box code {
+  background: rgba(108, 92, 231, 0.18);
+  color: var(--ink);
+}
+
+/* 图表区域 */
+body.dark figure.diagram .dbox {
+  background: var(--bg2);
+  border-color: var(--rule);
+}
+
+/* 主题切换过渡 */
+body, body * {
+  transition-property: background-color, border-color, color;
+  transition-duration: 0.25s;
+}
+
+/* ---------- 章节页目录侧边栏(桌面端) ---------- */
+.toc-side {
+  display: none;
+}
+@media (min-width: 1100px) {
+  .toc-side {
+    display: block;
+    position: fixed;
+    left: max(12px, calc(50% - 520px));
+    top: 96px;
+    width: 172px;
+    max-height: calc(100vh - 140px);
+    overflow-y: auto;
+    padding: 6px 0;
+    border-left: 2px solid var(--rule, #e3e6f0);
+  }
+  .toc-side a {
+    display: block;
+    font-size: 0.78rem;
+    color: var(--muted, #5a6072);
+    text-decoration: none;
+    padding: 5px 0 5px 14px;
+    line-height: 1.4;
+    border-left: 2px solid transparent;
+    margin-left: -2px;
+    transition: color 0.2s, border-color 0.2s;
+  }
+  .toc-side a:hover { color: var(--accent, #6c5ce7); }
+  .toc-side a.active {
+    color: var(--accent, #6c5ce7);
+    border-left-color: var(--accent, #6c5ce7);
+    font-weight: 600;
+  }
+}
+
+/* ---------- 打印优化 ---------- */
+@media print {
+  .read-progress, .theme-toggle, .back-top, .toc-side {
+    display: none !important;
+  }
+  body { background: #fff !important; }
+  .chapter-card, .card, .step, .homework, .s-node, .check {
+    box-shadow: none !important;
+  }
+}
